@@ -1,23 +1,27 @@
-import { Authenticator } from '@aws-amplify/ui-react';
-import { Amplify } from 'aws-amplify';
-import outputs from './amplify_outputs.json';
+import React, { useEffect } from 'react';
+import { useAuthenticator } from '@aws-amplify/ui-react';
 import '@aws-amplify/ui-react/styles.css';
 
-Amplify.configure(outputs);
+const App = () => {
+  const { signOut, authStatus } = useAuthenticator();
 
+  useEffect(() => {
+    console.log('Auth Status:', authStatus);
+  }, [authStatus]);
 
-Amplify.configure(outputs);
+  const handleSignOut = () => {
+    console.log('Signing out...');
+    signOut();
+  };
 
-export default function App({ Component, pageProps }) {
   return (
-    <Authenticator>
-      {({ signOut, user }) => (
-        <main>
-          <h1>Hello {user?.username}</h1>
-          <button onClick={signOut}>Sign out</button>
-          <Component {...pageProps} />
-        </main>
-      )}
-    </Authenticator>
+    <div>
+      <h1>Welcome to LearnNova!</h1>
+      <p>This is your main application where users can share knowledge, interact with posts, etc.</p>
+
+      <button onClick={handleSignOut}>Sign out</button>
+    </div>
   );
 };
+
+export default App;
